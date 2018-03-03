@@ -2560,11 +2560,20 @@ var winURL = process.env.NODE_ENV === 'development' ? 'http://localhost:9080' : 
 
 function createWindow() {
   mainWindow = new __WEBPACK_IMPORTED_MODULE_0_electron__["BrowserWindow"]({
-    height: 563,
+    height: 60,
     useContentSize: true,
-    width: 1000
+    width: 200,
+    transparent: true,
+    titleBarStyle: 'hidden',
+    frame: false,
+    resizable: false,
+    webPreferences: {
+      overlayScrollbars: true
+    }
   });
-
+  mainWindow.setMenuBarVisibility(false);
+  mainWindow.setAlwaysOnTop(true);
+  mainWindow.setIgnoreMouseEvents(false);
   mainWindow.loadURL(winURL);
 
   mainWindow.on('closed', function () {
@@ -2602,7 +2611,7 @@ module.exports = __webpack_require__(15);
 
 process.env.NODE_ENV = 'development';
 
-__webpack_require__(18)({ showDevTools: true });
+__webpack_require__(18)({ showDevTools: false });
 
 __webpack_require__(2).app.on('ready', function () {
   var installExtension = __webpack_require__(30);

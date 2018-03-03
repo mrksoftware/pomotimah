@@ -20,11 +20,20 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
+    height: 60,
     useContentSize: true,
-    width: 1000
+    width: 200,
+    transparent: true,
+    titleBarStyle: 'hidden',
+    frame: false,
+    resizable: false,
+    webPreferences: {
+      overlayScrollbars: true
+    }
   })
-
+  mainWindow.setMenuBarVisibility(false)
+  mainWindow.setAlwaysOnTop(true)
+  mainWindow.setIgnoreMouseEvents(false)
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
