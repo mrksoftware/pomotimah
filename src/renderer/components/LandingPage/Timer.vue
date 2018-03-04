@@ -75,7 +75,7 @@
         return this.$store.getters.currentSlotName
       },
       currentIteration () {
-        return `${Math.floor((this.$store.getters.getCurrentIteration + 1) / 2)}/4`
+        return `${Math.floor((this.$store.getters.getCurrentIteration + 1) / 2)}/8`
       },
       workMilliseconds () {
         return this.$store.getters.currentTimerValue * 1000
