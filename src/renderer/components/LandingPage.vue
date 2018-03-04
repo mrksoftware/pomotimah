@@ -1,20 +1,29 @@
 <template>
   <div id="wrapper">
-    <div>Test1</div>
+    <Timer></Timer>
+    <DraggableArea></DraggableArea>
   </div>
 </template>
 
 <script>
+import Timer from './LandingPage/Timer'
+import DraggableArea from './LandingPage/DraggableArea'
+
+export default {
+  name: 'LandingPage',
+  components: {Timer, DraggableArea}
+}
 </script>
 
 <style lang="scss">
 
-body {
-  font-family: "Source Sans Pro", sans-serif;
-  -webkit-app-region: none;
-  background: rgba(0, 0, 30, 0.20);;
-  color: white;
-  margin-top: 30px;
+div#wrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  height: 100vh !important;
+  margin-top: 0px;
+  background-color: rgba(51, 51, 51, 0.6);
 }
 
 </style>

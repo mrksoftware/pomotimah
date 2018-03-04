@@ -28,33 +28,12 @@
 body{
   margin: 0;
   padding: 0px;
-  padding: 2px;
-  background-color: rgba(0,0,30,0.15);
+  font-family: "Source Sans Pro", sans-serif;
+  color: white;
   overflow: hidden;
-  opacity: 0.95;
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale !important;
 }
 
-
-// Webview
-// Webview
-// Webview
-#browserView{
-    display: block;
-    width: 100%;
-    // width: calc(100% + 22px) !important;
-    height: 100%;
-    height: calc(100vh - 78px) !important;
-    margin-top: 32px;
-    // height: 100vh !important;
-    z-index: 5;
-    background-color: white;
-
-    &.full-size{
-        height: 100vh !important;
-        margin-top: 0;
-    }
-}
 </style>
 

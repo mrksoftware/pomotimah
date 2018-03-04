@@ -1,0 +1,26 @@
+@mixin disable-selection() {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+@mixin animate-property($prop, $speed) {
+  -webkit-transition: $prop $speed ease-in-out;
+  -ms-transition: $prop $speed ease-in-out;
+  transition: $prop $speed ease-in-out;
+}
+
+@mixin color-button($color){
+  color: $color;
+
+  &:hover {
+    color: darken($color, 3);
+  }
+
+  &:active {
+    color: darken($color, 10);
+  }
+}
