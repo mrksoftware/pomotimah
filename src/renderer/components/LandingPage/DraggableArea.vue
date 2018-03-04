@@ -83,11 +83,12 @@ div#draggableArea {
     
     &#playPauseButton {
       @include color-button(green);
+      font-size: 9px;
     }
 
     &#skipButton {
       @include color-button(orange);
-      font-size: 9px;
+      font-size: 8px;
     }
 
   }
@@ -101,7 +102,7 @@ div#draggableArea {
     font-weight: bold;
     box-sizing: border-box;
     text-align: center;
-    line-height: 8px;
+    line-height: 5px;
     color: lighten($draggable-area-background, 20);
   }
 }

@@ -4,7 +4,7 @@
       id="progressCircle"
       ref="progressCircle"
       :progress="100" 
-      :size="40"
+      :size="30"
       line-cap="round"
       :fill="fill"
       empty-fill="rgba(0, 0, 0, .1)"
@@ -108,7 +108,7 @@
       #countdown {
         display: flex;
         flex-grow: 1;
-        font-size: 24px;
+        font-size: 16px;
         font-weight: 100;
       }
 
@@ -116,7 +116,7 @@
         display: flex;
         flex-direction: row;
         flex-grow: 1;
-        font-size: 10px;
+        font-size: 9px;
         text-transform: uppercase;
         padding-right: 6px;
 
