@@ -23,7 +23,7 @@ div#wrapper {
   flex-direction: row;
   height: 100vh !important;
   margin-top: 0px;
-  background-color: rgba(51, 51, 51, 0.6);
+  background-color: rgba(51, 51, 51, 0.35);
 }
 
 </style>
