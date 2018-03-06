@@ -40,11 +40,9 @@ const mutations = {
 
 const actions = {
   startTimer ({ commit }) {
-    // do something async
     commit('START_TIMER')
   },
   pauseTimer ({ commit }) {
-    // do something async
     commit('PAUSE_TIMER')
   },
   moveToNextSlot ({ commit }) {
