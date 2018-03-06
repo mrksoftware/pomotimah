@@ -1,34 +1,43 @@
 <template>
-  <div id="container">
-    <vue-circle 
-      id="progressCircle"
-      ref="progressCircle"
-      :progress="100" 
-      :size="30"
-      line-cap="round"
-      :fill="fill"
-      empty-fill="rgba(0, 0, 0, .1)"
-      :animation-start-value="0.0"
-      :start-angle="0"
-      insert-mode="append"
-      :thickness="2"
-      :show-percent="true">
-    </vue-circle>
-    <div id="timerCotainer">
-      <VueCountdown ref="countdown"
-        id="countdown"
-        :time="workMilliseconds"
-        :interval="1000"
-        :leading-zero="true"
-        :emit-events="true"
-        :auto-start="isTimerInProgress"
-        @countdownprogress="onCountDownProgress"
-        @countdownend="onCountdownEnd">
-        <template slot-scope="props">{{ props.minutes }}:{{ props.seconds }}</template>
-      </VueCountdown>
-      <div id="spanContainer">
-        <span id="slotName">{{ currentSlotName }}</span>
-        <span id="iterationCount">{{ currentIteration }}</span>
+    <div id="container">
+    <div id="minimizedContainer" v-if="!isPromptingNextSlot">
+      <vue-circle 
+        id="progressCircle"
+        ref="progressCircle"
+        :progress="100" 
+        :size="30"
+        line-cap="round"
+        :fill="fill"
+        empty-fill="rgba(0, 0, 0, .1)"
+        :animation-start-value="0.0"
+        :start-angle="0"
+        insert-mode="append"
+        :thickness="2"
+        :show-percent="true">
+      </vue-circle>
+      <div id="timerCotainer">
+        <VueCountdown ref="countdown"
+          id="countdown"
+          :time="workMilliseconds"
+          :interval="1000"
+          :leading-zero="true"
+          :emit-events="true"
+          :auto-start="isTimerInProgress"
+          @countdownprogress="onCountDownProgress"
+          @countdownend="onCountdownEnd">
+          <template slot-scope="props">{{ props.minutes }}:{{ props.seconds }}</template>
+        </VueCountdown>
+        <div id="spanContainer">
+          <span id="slotName">{{ currentSlotName }}</span>
+          <span id="iterationCount">{{ currentIteration }}</span>
+        </div>
+      </div>
+    </div>
+    <div id="maximizedContainer" v-else>
+      <span>Do you wanna start your next slot?</span>
+      <div id="buttonContainer">
+        <button id="yesButton" @click="onYesButtonClicked()">Yep!</button>
+        <button id="noButton" @click="onNoButtonClicked()">Nope!</button>
       </div>
     </div>
   </div>
@@ -37,6 +46,7 @@
 <script>
   import VueCircle from 'vue2-circle-progress'
   import VueCountdown from './../../utils/countdown'
+  const { remote } = require('electron')
 
   export default {
     name: 'Timer',
@@ -49,11 +59,51 @@
     },
     methods: {
       onCountDownProgress (args) {
+        let window = remote.getCurrentWindow()
         this.remainingMilliseconds = args.remainingMilliseconds
-        this.$refs.progressCircle.updateProgress((100 * this.remainingMilliseconds) / this.workMilliseconds)
+        let progressValue = (100 * this.remainingMilliseconds) / this.workMilliseconds
+        this.$refs.progressCircle.updateProgress(progressValue)
+        window.setProgressBar(progressValue / 100, {mode: this.getTaskBarProgressBarMode()})
+      },
+      getTaskBarProgressBarMode () {
+        switch (this.currentSlotName) {
+          case 'work':
+            return 'error'
+          case 'short-break':
+            return 'pause'
+          case 'long-break':
+            return 'normal'
+          default:
+            return 'normal'
+        }
       },
       onCountdownEnd () {
+        let window = remote.getCurrentWindow()
+        this.$store.dispatch('setMinimizedPosition', window.getPosition())
+        // maximaze and prompt state change
+        window.center()
+        window.maximize()
+        this.$store.dispatch('promptNextSlot')
+        window.setIgnoreMouseEvents(false)
+        window.flashFrame(true)
+      },
+      onYesButtonClicked () {
+        let { x, y } = this.$store.getters.getMinimizedPosition
+        let window = remote.getCurrentWindow()
+        window.setPosition(x, y, true)
+        window.setContentSize(200, 46 + 9) // Dunno why.. but it doesn't respect the size I put.. ¯\_(ツ)_/¯
+        this.$store.dispatch('startTimer')
         this.$store.dispatch('moveToNextSlot')
+        window.setIgnoreMouseEvents(true, {forward: true})
+      },
+      onNoButtonClicked () {
+        let { x, y } = this.$store.getters.getMinimizedPosition
+        let window = remote.getCurrentWindow()
+        window.setPosition(x, y, true)
+        window.setContentSize(200, 46 + 9) // Dunno why.. but it doesn't respect the size I put.. ¯\_(ツ)_/¯
+        this.$store.dispatch('pauseTimer')
+        this.$store.dispatch('moveToNextSlot')
+        window.setIgnoreMouseEvents(true, {forward: true})
       }
     },
     mounted () {
@@ -82,6 +132,9 @@
       },
       isTimerInProgress () {
         return this.$store.getters.isTimerInProgress
+      },
+      isPromptingNextSlot () {
+        return this.$store.getters.isPromptingNextSlot
       }
     }
   }
@@ -93,38 +146,73 @@
   div#container {
     display: flex;
     flex-grow: 1;
-    align-items: center;
-    @include disable-selection();
 
-    #progressCircle {
-      margin: 12px;
-    }
-
-    #timerCotainer {
+    div#minimizedContainer {
       display: flex;
-      flex-direction: column;
       flex-grow: 1;
+      align-items: center;
+      @include disable-selection();
 
-      #countdown {
-        display: flex;
-        flex-grow: 1;
-        font-size: 16px;
-        font-weight: 100;
+      #progressCircle {
+        margin: 12px;
       }
 
-      div#spanContainer {
+      #timerCotainer {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         flex-grow: 1;
-        font-size: 9px;
-        text-transform: uppercase;
-        padding-right: 6px;
 
-        #slotName {
+        #countdown {
+          display: flex;
           flex-grow: 1;
+          font-size: 16px;
+          font-weight: 100;
+        }
+
+        div#spanContainer {
+          display: flex;
+          flex-direction: row;
+          flex-grow: 1;
+          font-size: 9px;
+          text-transform: uppercase;
+          padding-right: 6px;
+
+          #slotName {
+            flex-grow: 1;
+          }
+        }
+      }
+    }
+
+    div#maximizedContainer {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(51, 51, 51, 0.95);
+
+      div#buttonContainer {
+        display: flex;
+        margin: 12px;
+
+        button {
+          width: 120px;
+          text-align: center;
+          margin: 12px;
+          height: 30px;
+
+          &#yesButton {
+            @include bg-color-button(#27ae60);
+            border-radius: 2px;
+          }
+
+          &#noButton {
+            @include bg-color-button(#c0392b);
+            border-radius: 2px;
+          }
         }
       }
     }
   }
 </style>
-

@@ -4,7 +4,9 @@ const state = {
   longBreakInSeconds: 900,
   currentIteration: 1,
   currentSlotName: 'work', // work, short-break, long-break
-  isTimerStarted: false
+  isTimerStarted: false,
+  isPromptingNextSlot: false,
+  minimizedWindowPosition: [100, 100]
 }
 
 const mutations = {
@@ -15,6 +17,7 @@ const mutations = {
     state.isTimerStarted = false
   },
   MOVE_TO_NEXT_SLOT (state) {
+    state.isPromptingNextSlot = false
     state.currentIteration++
     if (state.currentSlotName === 'work' && state.currentIteration % 8 !== 0) {
       state.currentSlotName = 'short-break'
@@ -26,6 +29,12 @@ const mutations = {
     if (state.currentIteration > 16) {
       state.currentIteration = 1
     }
+  },
+  PROMPT_NEXT_SLOT (state) {
+    state.isPromptingNextSlot = true
+  },
+  SET_MINIMZED_POSITION (state, coordinates) {
+    state.minimizedWindowPosition = coordinates
   }
 }
 
@@ -40,6 +49,12 @@ const actions = {
   },
   moveToNextSlot ({ commit }) {
     commit('MOVE_TO_NEXT_SLOT')
+  },
+  promptNextSlot ({commit}) {
+    commit('PROMPT_NEXT_SLOT')
+  },
+  setMinimizedPosition ({ commit }, coordinates) {
+    commit('SET_MINIMZED_POSITION', coordinates)
   }
 }
 
@@ -73,6 +88,15 @@ const getters = {
   },
   getCurrentIteration () {
     return state.currentIteration
+  },
+  isPromptingNextSlot () {
+    return state.isPromptingNextSlot
+  },
+  getMinimizedPosition () {
+    return {
+      x: state.minimizedWindowPosition[0],
+      y: state.minimizedWindowPosition[1]
+    }
   }
 }
 

@@ -24,3 +24,19 @@
     color: darken($color, 10);
   }
 }
+
+@mixin bg-color-button($bg-color, $color: white) {
+  background-color: $bg-color;
+  border: 1px solid $bg-color;
+  color: $color;
+
+  &:hover {
+    border: 1px darken($bg-color, 10);
+    background-color: darken($bg-color, 3);
+  }
+
+  &:active {
+    border: 1px solid darken($bg-color, 10);
+    background-color: darken($bg-color, 10);
+  }
+}

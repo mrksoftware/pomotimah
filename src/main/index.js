@@ -20,7 +20,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 40,
+    height: 46,
     useContentSize: true,
     width: 200,
     transparent: true,
@@ -38,6 +38,10 @@ function createWindow () {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+  })
+
+  mainWindow.on('move', () => {
+    mainWindow.setIgnoreMouseEvents(false)
   })
 }
 

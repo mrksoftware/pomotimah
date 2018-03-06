@@ -1,5 +1,5 @@
 <template>
-  <div id="draggableArea" @mousemove="onMouseMove()" v-bind:class="{isDraggable: !isDraggable}">
+  <div id="draggableArea" @mousemove="onMouseMove()" v-bind:class="{isDraggable: !isDraggable, isPromptingNextSlot: isPromptingNextSlot}">
     <button id="playPauseButton" @click="onPlayClick()" @mouseover="onMouseMove()">{{ playPauseButtonText }}</button>
     <div class="draggerContainer">
       <span class="draggerSpan">···</span>
@@ -39,9 +39,11 @@ export default {
       clearTimeout(timer)
       let self = this // eslint-disable-line no-unused-vars
       timer = setTimeout(function () {
-        self.isDraggable = false
-        var window = remote.getCurrentWindow()
-        window.setIgnoreMouseEvents(true, {forward: true})
+        if (!this.isPromptingNextSlot) {
+          self.isDraggable = false
+          var window = remote.getCurrentWindow()
+          window.setIgnoreMouseEvents(true, {forward: true})
+        }
       }, 2000)
     }
   },
@@ -52,6 +54,9 @@ export default {
       } else {
         return '►'
       }
+    },
+    isPromptingNextSlot () {
+      return this.$store.getters.isPromptingNextSlot
     }
   }
 }
@@ -76,19 +81,27 @@ div#draggableArea {
     @include animate-property(background-color, $animation-speed);
   }
 
+  &.isPromptingNextSlot {
+    background: rgba($draggable-area-background,1);
+
+    button {
+      display: none;
+    }
+  }
+
   button {
     -webkit-app-region: no-drag;
     background: transparent;
     border: transparent;
-    
+
     &#playPauseButton {
       @include color-button(green);
-      font-size: 9px;
+      font-size: 9.5px;
     }
 
     &#skipButton {
       @include color-button(orange);
-      font-size: 8px;
+      font-size: 8.5px;
     }
 
   }
