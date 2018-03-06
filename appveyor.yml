@@ -35,7 +35,7 @@ deploy:
   description: "$APPVEYOR_REPO_COMMIT_MESSAGE"
   provider: GitHub
   auth_token:
-    secure: "$GH_TOKEN"
+    secure: "$GH_KEY"
   artifact: /.*\.exe/
   draft: true
   prerelease: false
