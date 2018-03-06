@@ -30,4 +30,18 @@ build_script:
   #- yarn test
   - yarn build
 
+deploy:
+  release: pomotimah-v$(appveyor_build_version)
+  description: "$APPVEYOR_REPO_COMMIT_MESSAGE"
+  provider: GitHub
+  auth_token:
+    secure: "$GH_TOKEN"
+  artifact: /.*\.exe/
+  draft: true
+  prerelease: false
+  force_update: false
+  on:
+    branch: master
+    appveyor_repo_tag: true
+
 test: off
