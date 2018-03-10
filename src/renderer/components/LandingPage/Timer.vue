@@ -50,25 +50,6 @@
   import VueCountdown from './../../utils/countdown'
   const { remote, ipcRenderer } = require('electron')
 
-  ipcRenderer.on('update-available', () => {
-    console.log('update available')
-    this.isCheckingForUpdate = false
-    this.isUpdateNotAvailable = false
-    this.isUpdateAvailable = true
-  })
-  ipcRenderer.on('update-not-available', () => {
-    console.log('update not available')
-    this.isCheckingForUpdate = false
-    this.isUpdateNotAvailable = true
-    this.isUpdateAvailable = false
-  })
-  ipcRenderer.on('checking-for-update', () => {
-    console.log('checking for update')
-    this.isCheckingForUpdate = true
-    this.isUpdateNotAvailable = false
-    this.isUpdateAvailable = false
-  })
-
   export default {
     name: 'Timer',
     components: { VueCircle, VueCountdown },
@@ -143,6 +124,25 @@
           this.$store.dispatch('startTimer')
         }
       })
+
+      ipcRenderer.on('update-available', () => {
+        console.log('update available')
+        this.isCheckingForUpdate = false
+        this.isUpdateNotAvailable = false
+        this.isUpdateAvailable = true
+      })
+      ipcRenderer.on('update-not-available', () => {
+        console.log('update not available')
+        this.isCheckingForUpdate = false
+        this.isUpdateNotAvailable = true
+        this.isUpdateAvailable = false
+      })
+      ipcRenderer.on('checking-for-update', () => {
+        console.log('checking for update')
+        this.isCheckingForUpdate = true
+        this.isUpdateNotAvailable = false
+        this.isUpdateAvailable = false
+      })
     },
     computed: {
       currentSlotName () {
@@ -168,7 +168,7 @@
         } else if (this.isUpdateNotAvailable) {
           return 'noUpd'
         } else {
-          return 'dunno'
+          return 'nd'
         }
       }
     }

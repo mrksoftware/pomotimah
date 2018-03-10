@@ -1,6 +1,6 @@
 {
   "name": "pomotimah",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "author": "Mirko Bellabarba <mirko.bellabarba@gmail.com>",
   "description": "Pomodoro timer built in vue and electron",
   "license": null,
@@ -19,7 +19,7 @@
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "start": "electron .",
-    "ship": "electron-builder --win -p always",
+    "ship": "node .electron-vue/build.js && electron-builder --win -p always",
     "test": "npm run unit",
     "unit": "karma start test/unit/karma.conf.js",
     "postinstall": "npm run lint:fix"
