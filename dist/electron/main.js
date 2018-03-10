@@ -2629,7 +2629,8 @@ __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].on('update-availab
 });
 
 __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].on('download-progress', function (progress) {
-  mainWindow.webContents.send('download-progress', progress);
+  var message = progress.percent + '% at ' + progress.bytesPerSecond + 'Mb/s';
+  mainWindow.webContents.send('download-progress', message);
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src\\main"))
 
