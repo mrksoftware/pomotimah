@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow } from 'electron'
 import { autoUpdater } from 'electron-updater'
+const isDev = require('electron-is-dev')
 
 /**
  * Set `__static` path to static files in production
@@ -12,7 +13,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
-const winURL = process.env.NODE_ENV === 'development'
+const winURL = isDev
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
@@ -48,7 +49,7 @@ function createWindow () {
 
 app.on('ready', () => {
   createWindow()
-  if (process.env.NODE_ENV === 'production') {
+  if (!isDev) {
     autoUpdater.checkForUpdates()
   }
 })

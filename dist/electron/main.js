@@ -61,7 +61,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1067,7 +1067,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(25);
+exports.humanize = __webpack_require__(26);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -1260,6 +1260,18 @@ function coerce(val) {
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
+const isEnvSet = 'ELECTRON_IS_DEV' in process.env;
+
+module.exports = isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -1268,10 +1280,10 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 8;
+webpackEmptyContext.id = 9;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Approach:
@@ -1317,7 +1329,7 @@ webpackEmptyContext.id = 8;
 module.exports = glob
 
 var fs = __webpack_require__(1)
-var rp = __webpack_require__(10)
+var rp = __webpack_require__(11)
 var minimatch = __webpack_require__(5)
 var Minimatch = minimatch.Minimatch
 var inherits = __webpack_require__(38)
@@ -1326,7 +1338,7 @@ var path = __webpack_require__(0)
 var assert = __webpack_require__(4)
 var isAbsolute = __webpack_require__(6)
 var globSync = __webpack_require__(41)
-var common = __webpack_require__(11)
+var common = __webpack_require__(12)
 var alphasort = common.alphasort
 var alphasorti = common.alphasorti
 var setopts = common.setopts
@@ -1336,7 +1348,7 @@ var util = __webpack_require__(3)
 var childrenIgnored = common.childrenIgnored
 var isIgnored = common.isIgnored
 
-var once = __webpack_require__(13)
+var once = __webpack_require__(14)
 
 function glob (pattern, options, cb) {
   if (typeof options === 'function') cb = options, options = {}
@@ -2067,7 +2079,7 @@ Glob.prototype._stat2 = function (f, abs, er, stat, cb) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = realpath
@@ -2139,7 +2151,7 @@ function unmonkeypatch () {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.alphasort = alphasort
@@ -2385,7 +2397,7 @@ function childrenIgnored (self, path) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 // Returns a wrapper function that returns a wrapped callback
@@ -2424,10 +2436,10 @@ function wrappy (fn, cb) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var wrappy = __webpack_require__(12)
+var wrappy = __webpack_require__(13)
 module.exports = wrappy(once)
 module.exports.strict = wrappy(onceStrict)
 
@@ -2472,7 +2484,7 @@ function onceStrict (fn) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2540,7 +2552,7 @@ var changePermissions = exports.changePermissions = function changePermissions(d
 };
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2553,13 +2565,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+var isDev = __webpack_require__(8);
 
 if (process.env.NODE_ENV !== 'development') {
   global.__static = __webpack_require__(0).join(__dirname, '/static').replace(/\\/g, '\\\\');
 }
 
 var mainWindow = void 0;
-var winURL = process.env.NODE_ENV === 'development' ? 'http://localhost:9080' : 'file://' + __dirname + '/index.html';
+var winURL = isDev ? 'http://localhost:9080' : 'file://' + __dirname + '/index.html';
 
 function createWindow() {
   mainWindow = new __WEBPACK_IMPORTED_MODULE_0_electron__["BrowserWindow"]({
@@ -2590,7 +2603,7 @@ function createWindow() {
 
 __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', function () {
   createWindow();
-  if (process.env.NODE_ENV === 'production') {
+  if (!isDev) {
     __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].checkForUpdates();
   }
 });
@@ -2635,21 +2648,21 @@ __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].on('download-progr
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src\\main"))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(17);
-module.exports = __webpack_require__(15);
+__webpack_require__(18);
+module.exports = __webpack_require__(16);
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 process.env.NODE_ENV = 'development';
 
-__webpack_require__(18)({ showDevTools: true });
+__webpack_require__(19)({ showDevTools: true });
 
 __webpack_require__(2).app.on('ready', function () {
   var installExtension = __webpack_require__(30);
@@ -2658,17 +2671,17 @@ __webpack_require__(2).app.on('ready', function () {
   });
 });
 
-__webpack_require__(15);
+__webpack_require__(16);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 const electron = __webpack_require__(2);
-const localShortcut = __webpack_require__(19);
-const isDev = __webpack_require__(29);
+const localShortcut = __webpack_require__(20);
+const isDev = __webpack_require__(8);
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -2765,16 +2778,16 @@ module.exports.openDevTools = openDevTools;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 const {app, BrowserWindow} = __webpack_require__(2);
-const isAccelerator = __webpack_require__(20);
-const equals = __webpack_require__(21);
-const {toKeyEvent} = __webpack_require__(22);
-const _debug = __webpack_require__(23);
+const isAccelerator = __webpack_require__(21);
+const equals = __webpack_require__(22);
+const {toKeyEvent} = __webpack_require__(23);
+const _debug = __webpack_require__(24);
 
 const debug = _debug('electron-localshortcut');
 
@@ -3074,7 +3087,7 @@ module.exports = {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3102,7 +3115,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3148,7 +3161,7 @@ module.exports = areEqual;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3419,7 +3432,7 @@ exports.toKeyEvent = toKeyEvent;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -3428,14 +3441,14 @@ exports.toKeyEvent = toKeyEvent;
  */
 
 if (typeof process !== 'undefined' && process.type === 'renderer') {
-  module.exports = __webpack_require__(24);
+  module.exports = __webpack_require__(25);
 } else {
-  module.exports = __webpack_require__(26);
+  module.exports = __webpack_require__(27);
 }
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -3626,7 +3639,7 @@ function localstorage() {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 /**
@@ -3784,14 +3797,14 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module dependencies.
  */
 
-var tty = __webpack_require__(27);
+var tty = __webpack_require__(28);
 var util = __webpack_require__(3);
 
 /**
@@ -3979,7 +3992,7 @@ function createWritableStdioStream (fd) {
 
     case 'PIPE':
     case 'TCP':
-      var net = __webpack_require__(28);
+      var net = __webpack_require__(29);
       stream = new net.Socket({
         fd: fd,
         readable: false,
@@ -4038,28 +4051,16 @@ exports.enable(load());
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = require("tty");
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 module.exports = require("net");
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
-const isEnvSet = 'ELECTRON_IS_DEV' in process.env;
-
-module.exports = isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
-
 
 /***/ }),
 /* 30 */
@@ -4095,7 +4096,7 @@ var _downloadChromeExtension = __webpack_require__(32);
 
 var _downloadChromeExtension2 = _interopRequireDefault(_downloadChromeExtension);
 
-var _utils = __webpack_require__(14);
+var _utils = __webpack_require__(15);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5554,7 +5555,7 @@ var _crossUnzip = __webpack_require__(43);
 
 var _crossUnzip2 = _interopRequireDefault(_crossUnzip);
 
-var _utils = __webpack_require__(14);
+var _utils = __webpack_require__(15);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5608,7 +5609,7 @@ rimraf.sync = rimrafSync
 var assert = __webpack_require__(4)
 var path = __webpack_require__(0)
 var fs = __webpack_require__(1)
-var glob = __webpack_require__(9)
+var glob = __webpack_require__(10)
 var _0666 = parseInt('666', 8)
 
 var defaultGlobOpts = {
@@ -6625,15 +6626,15 @@ module.exports = globSync
 globSync.GlobSync = GlobSync
 
 var fs = __webpack_require__(1)
-var rp = __webpack_require__(10)
+var rp = __webpack_require__(11)
 var minimatch = __webpack_require__(5)
 var Minimatch = minimatch.Minimatch
-var Glob = __webpack_require__(9).Glob
+var Glob = __webpack_require__(10).Glob
 var util = __webpack_require__(3)
 var path = __webpack_require__(0)
 var assert = __webpack_require__(4)
 var isAbsolute = __webpack_require__(6)
-var common = __webpack_require__(11)
+var common = __webpack_require__(12)
 var alphasort = common.alphasort
 var alphasorti = common.alphasorti
 var setopts = common.setopts
@@ -7113,9 +7114,9 @@ GlobSync.prototype._makeAbs = function (f) {
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var wrappy = __webpack_require__(12)
+var wrappy = __webpack_require__(13)
 var reqs = Object.create(null)
-var once = __webpack_require__(13)
+var once = __webpack_require__(14)
 
 module.exports = wrappy(inflight)
 
