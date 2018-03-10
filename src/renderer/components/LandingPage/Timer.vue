@@ -28,7 +28,9 @@
           <template slot-scope="props">{{ props.minutes }}:{{ props.seconds }}</template>
         </VueCountdown>
         <div id="spanContainer">
-          <span id="slotName">{{ currentSlotName }}</span>
+          <span 
+            :class="{ updateAvailable: isUpdateAvailable, updateNotAvailable: isUpdateNotAvailable, checkingForUpdate: isCheckingForUpdate}"
+            id="slotName">{{ currentSlotName }} - {{ getUpdateStatus }}</span>
           <span id="iterationCount">{{ currentIteration }}</span>
         </div>
       </div>
@@ -46,7 +48,26 @@
 <script>
   import VueCircle from 'vue2-circle-progress'
   import VueCountdown from './../../utils/countdown'
-  const { remote } = require('electron')
+  const { remote, ipcRenderer } = require('electron')
+
+  ipcRenderer.on('update-available', () => {
+    console.log('update available')
+    this.isCheckingForUpdate = false
+    this.isUpdateNotAvailable = false
+    this.isUpdateAvailable = true
+  })
+  ipcRenderer.on('update-not-available', () => {
+    console.log('update not available')
+    this.isCheckingForUpdate = false
+    this.isUpdateNotAvailable = true
+    this.isUpdateAvailable = false
+  })
+  ipcRenderer.on('checking-for-update', () => {
+    console.log('checking for update')
+    this.isCheckingForUpdate = true
+    this.isUpdateNotAvailable = false
+    this.isUpdateAvailable = false
+  })
 
   export default {
     name: 'Timer',
@@ -54,7 +75,10 @@
     data () {
       return {
         fill: {gradient: ['#c0392b']},
-        remainingMilliseconds: this.$store.getters.currentTimerValue * 1000
+        remainingMilliseconds: this.$store.getters.currentTimerValue * 1000,
+        isUpdateAvailable: false,
+        isCheckingForUpdate: false,
+        isUpdateNotAvailable: false
       }
     },
     methods: {
@@ -135,6 +159,17 @@
       },
       isPromptingNextSlot () {
         return this.$store.getters.isPromptingNextSlot
+      },
+      getUpdateStatus () {
+        if (this.isUpdateAvailable) {
+          return 'updAv'
+        } else if (this.isCheckingForUpdate) {
+          return 'chkUp'
+        } else if (this.isUpdateNotAvailable) {
+          return 'noUpd'
+        } else {
+          return 'dunno'
+        }
       }
     }
   }
@@ -179,6 +214,18 @@
 
           #slotName {
             flex-grow: 1;
+
+            &.updateAvailable {
+              color: #8e44ad;
+            }
+
+            &.updateNotAvailable {
+              color: #c0392b;
+            }
+
+            &.checkingForUpdate {
+              color: #2980b9;
+            }
           }
         }
       }

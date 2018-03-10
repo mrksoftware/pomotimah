@@ -74,5 +74,22 @@ app.on('activate', () => {
  */
 
 autoUpdater.on('update-downloaded', () => {
+  console.log('--check')
+  mainWindow.webContents.send('update-downloaded')
   autoUpdater.quitAndInstall()
+})
+
+autoUpdater.on('checking-for-update', () => {
+  console.log('--check')
+  mainWindow.webContents.send('checking-for-update')
+})
+
+autoUpdater.on('update-not-available', () => {
+  console.log('--not')
+  mainWindow.webContents.send('update-not-available')
+})
+
+autoUpdater.on('update-available', () => {
+  console.log('--yep')
+  mainWindow.webContents.send('update-available')
 })

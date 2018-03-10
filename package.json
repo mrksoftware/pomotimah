@@ -1,11 +1,11 @@
 {
   "name": "pomotimah",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "author": "Mirko Bellabarba <mirko.bellabarba@gmail.com>",
   "description": "Pomodoro timer built in vue and electron",
   "license": null,
   "main": "./dist/electron/main.js",
-  "repository": "https://github.com/mrksoftware/pomotimah",
+  "repository": "git@github.com:mrksoftware/pomotimah.git",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
@@ -19,6 +19,7 @@
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "start": "electron .",
+    "ship": "electron-builder --win -p always",
     "test": "npm run unit",
     "unit": "karma start test/unit/karma.conf.js",
     "postinstall": "npm run lint:fix"
@@ -30,11 +31,18 @@
       "output": "build"
     },
     "files": [
-      "dist/electron/**/*"
+      "dist/electron/**/*",
+      "node_modules/",
+      "package.json"
     ],
     "win": {
       "target": "nsis",
       "icon": "build/icons/icon.ico"
+    },
+    "publish": {
+      "provider": "github",
+      "repo": "pomotimah",
+      "owner": "mrksoftware"
     }
   },
   "dependencies": {
