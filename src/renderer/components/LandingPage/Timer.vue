@@ -28,10 +28,16 @@
           <template slot-scope="props">{{ props.minutes }}:{{ props.seconds }}</template>
         </VueCountdown>
         <div id="spanContainer">
-          <span 
-            :class="{ updateAvailable: isUpdateAvailable, updateNotAvailable: isUpdateNotAvailable, checkingForUpdate: isCheckingForUpdate}"
-            id="slotName">{{ currentSlotName }} - {{ getUpdateStatus }}</span>
-          <span id="iterationCount">{{ currentIteration }}</span>
+          <div id="leftSpanContainer">
+            <span id="slotName"
+              :class="{ updateAvailable: isUpdateAvailable, updateNotAvailable: isUpdateNotAvailable, checkingForUpdate: isCheckingForUpdate}">
+              {{ currentSlotName }}
+            </span>
+            <span v-cloak id="updateMessage">{{ getUpdateStatus }}</span>
+          </div>
+          <div id="rightSpanContainer">
+            <span id="iterationCount">{{ currentIteration }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -48,6 +54,7 @@
 <script>
   import VueCircle from 'vue2-circle-progress'
   import VueCountdown from './../../utils/countdown'
+  import { setTimeout } from 'timers'
   const { remote, ipcRenderer } = require('electron')
 
   export default {
@@ -59,7 +66,8 @@
         remainingMilliseconds: this.$store.getters.currentTimerValue * 1000,
         isUpdateAvailable: false,
         isCheckingForUpdate: false,
-        isUpdateNotAvailable: false
+        isUpdateNotAvailable: false,
+        isUpdateMessageShowed: false
       }
     },
     methods: {
@@ -130,18 +138,21 @@
         this.isCheckingForUpdate = false
         this.isUpdateNotAvailable = false
         this.isUpdateAvailable = true
+        this.isUpdateMessageShowed = false
       })
       ipcRenderer.on('update-not-available', () => {
         console.log('update not available')
         this.isCheckingForUpdate = false
         this.isUpdateNotAvailable = true
         this.isUpdateAvailable = false
+        this.isUpdateMessageShowed = false
       })
       ipcRenderer.on('checking-for-update', () => {
         console.log('checking for update')
         this.isCheckingForUpdate = true
         this.isUpdateNotAvailable = false
         this.isUpdateAvailable = false
+        this.isUpdateMessageShowed = false
       })
     },
     computed: {
@@ -162,13 +173,29 @@
       },
       getUpdateStatus () {
         if (this.isUpdateAvailable) {
-          return 'updAv'
+          return 'Update available'
         } else if (this.isCheckingForUpdate) {
-          return 'chkUp'
+          return 'Checking updates...'
         } else if (this.isUpdateNotAvailable) {
-          return 'noUpd'
+          return 'No Update available...'
+        } else if (this.isUpdateMessageShowed) {
+          return ''
         } else {
-          return 'nd'
+          return ''
+        }
+      }
+    },
+    watch: {
+      getUpdateStatus (val) {
+        let self = this
+        console.log(`check ${val} `)
+        if (val !== '') {
+          setTimeout(function () {
+            self.$data.isUpdateNotAvailable = false
+            self.$data.isUpdateAvailable = false
+            self.$data.isCheckingForUpdate = false
+            self.$data.isUpdateMessageShowed = true
+          }, 2500)
         }
       }
     }
@@ -212,19 +239,26 @@
           text-transform: uppercase;
           padding-right: 6px;
 
-          #slotName {
+          #leftSpanContainer {
             flex-grow: 1;
+            flex-direction: column;
 
-            &.updateAvailable {
-              color: #8e44ad;
-            }
+            span#updateMessage{
+              display: flex;
+              font-size: 8px;
+              color: #e0e0e0;
 
-            &.updateNotAvailable {
-              color: #c0392b;
-            }
+              &.updateAvailable {
+                color: #8e44ad;
+              }
 
-            &.checkingForUpdate {
-              color: #2980b9;
+              &.updateNotAvailable {
+                color: #e67e22;
+              }
+
+              &.checkingForUpdate {
+                color: #2980b9;
+              }
             }
           }
         }

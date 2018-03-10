@@ -1,6 +1,6 @@
 {
   "name": "pomotimah",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "author": "Mirko Bellabarba <mirko.bellabarba@gmail.com>",
   "description": "Pomodoro timer built in vue and electron",
   "license": null,
