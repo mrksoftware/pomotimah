@@ -1,6 +1,6 @@
 {
   "name": "pomotimah",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "author": "Mirko Bellabarba <mirko.bellabarba@gmail.com>",
   "description": "Pomodoro timer built in vue and electron",
   "license": null,
@@ -31,9 +31,7 @@
       "output": "build"
     },
     "files": [
-      "dist/electron/**/*",
-      "node_modules/",
-      "package.json"
+      "dist/electron/**/*"
     ],
     "win": {
       "target": "nsis",
