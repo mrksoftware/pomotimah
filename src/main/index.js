@@ -93,3 +93,7 @@ autoUpdater.on('update-available', () => {
   console.log('--yep')
   mainWindow.webContents.send('update-available')
 })
+
+autoUpdater.on('download-progress', (progress) => {
+  mainWindow.webContents.send('download-progress', progress)
+})

@@ -29,11 +29,8 @@
         </VueCountdown>
         <div id="spanContainer">
           <div id="leftSpanContainer">
-            <span id="slotName"
-              :class="{ updateAvailable: isUpdateAvailable, updateNotAvailable: isUpdateNotAvailable, checkingForUpdate: isCheckingForUpdate}">
-              {{ currentSlotName }}
-            </span>
-            <span v-cloak id="updateMessage">{{ getUpdateStatus }}</span>
+            <span id="slotName">{{ currentSlotName }}</span>
+            <span v-cloak id="updateMessage" v-if="hasToDisplayUpdateMessage">{{ updateStatus }}</span>
           </div>
           <div id="rightSpanContainer">
             <span id="iterationCount">{{ currentIteration }}</span>
@@ -64,10 +61,7 @@
       return {
         fill: {gradient: ['#c0392b']},
         remainingMilliseconds: this.$store.getters.currentTimerValue * 1000,
-        isUpdateAvailable: false,
-        isCheckingForUpdate: false,
-        isUpdateNotAvailable: false,
-        isUpdateMessageShowed: false
+        updateStatus: ''
       }
     },
     methods: {
@@ -134,25 +128,28 @@
       })
 
       ipcRenderer.on('update-available', () => {
-        console.log('update available')
-        this.isCheckingForUpdate = false
-        this.isUpdateNotAvailable = false
-        this.isUpdateAvailable = true
-        this.isUpdateMessageShowed = false
+        this.updateStatus = 'Getting new update...'
+        let self = this
+        setTimeout(function () {
+          self.$data.updateStatus = ''
+        }, 2500)
       })
       ipcRenderer.on('update-not-available', () => {
-        console.log('update not available')
-        this.isCheckingForUpdate = false
-        this.isUpdateNotAvailable = true
-        this.isUpdateAvailable = false
-        this.isUpdateMessageShowed = false
+        this.updateStatus = 'No update available...'
+        let self = this
+        setTimeout(function () {
+          self.$data.updateStatus = ''
+        }, 2500)
       })
       ipcRenderer.on('checking-for-update', () => {
-        console.log('checking for update')
-        this.isCheckingForUpdate = true
-        this.isUpdateNotAvailable = false
-        this.isUpdateAvailable = false
-        this.isUpdateMessageShowed = false
+        this.updateStatus = 'Checking for update'
+        let self = this
+        setTimeout(function () {
+          self.$data.updateStatus = ''
+        }, 2500)
+      })
+      ipcRenderer.on('download-progress', (progress) => {
+        this.updateStatus = `${progress.percent}% at ${progress.bytesPerSecond}Mb/s`
       })
     },
     computed: {
@@ -171,32 +168,8 @@
       isPromptingNextSlot () {
         return this.$store.getters.isPromptingNextSlot
       },
-      getUpdateStatus () {
-        if (this.isUpdateAvailable) {
-          return 'Update available'
-        } else if (this.isCheckingForUpdate) {
-          return 'Checking updates...'
-        } else if (this.isUpdateNotAvailable) {
-          return 'No Update available...'
-        } else if (this.isUpdateMessageShowed) {
-          return ''
-        } else {
-          return ''
-        }
-      }
-    },
-    watch: {
-      getUpdateStatus (val) {
-        let self = this
-        console.log(`check ${val} `)
-        if (val !== '') {
-          setTimeout(function () {
-            self.$data.isUpdateNotAvailable = false
-            self.$data.isUpdateAvailable = false
-            self.$data.isCheckingForUpdate = false
-            self.$data.isUpdateMessageShowed = true
-          }, 2500)
-        }
+      hasToDisplayUpdateMessage () {
+        return this.updateStatus !== ''
       }
     }
   }
@@ -247,18 +220,6 @@
               display: flex;
               font-size: 8px;
               color: #e0e0e0;
-
-              &.updateAvailable {
-                color: #8e44ad;
-              }
-
-              &.updateNotAvailable {
-                color: #e67e22;
-              }
-
-              &.checkingForUpdate {
-                color: #2980b9;
-              }
             }
           }
         }

@@ -2627,6 +2627,10 @@ __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].on('update-availab
   console.log('--yep');
   mainWindow.webContents.send('update-available');
 });
+
+__WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].on('download-progress', function (progress) {
+  mainWindow.webContents.send('download-progress', progress);
+});
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src\\main"))
 
 /***/ }),
