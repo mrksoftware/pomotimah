@@ -95,5 +95,6 @@ autoUpdater.on('update-available', () => {
 })
 
 autoUpdater.on('download-progress', (progress) => {
-  mainWindow.webContents.send('download-progress', progress)
+  let message = `${progress.percent}% at ${progress.bytesPerSecond}Mb/s`
+  mainWindow.webContents.send('download-progress', message)
 })

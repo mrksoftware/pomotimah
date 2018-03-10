@@ -148,8 +148,8 @@
           self.$data.updateStatus = ''
         }, 2500)
       })
-      ipcRenderer.on('download-progress', (progress) => {
-        this.updateStatus = `${progress.percent}% at ${progress.bytesPerSecond}Mb/s`
+      ipcRenderer.on('download-progress', (message) => {
+        this.updateStatus = message
       })
     },
     computed: {
