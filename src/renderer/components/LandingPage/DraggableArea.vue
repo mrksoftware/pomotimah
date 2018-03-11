@@ -10,7 +10,7 @@
 </template>
 
 <script>
-const { remote } = require('electron')
+const { remote, ipcRenderer } = require('electron')
 let timer
 
 export default {
@@ -46,6 +46,14 @@ export default {
         }
       }, 2000)
     }
+  },
+  mounted () {
+    ipcRenderer.on('play-pause-timer', () => {
+      this.onPlayClick()
+    })
+    ipcRenderer.on('skip-slot', () => {
+      this.onSkipClick()
+    })
   },
   computed: {
     playPauseButtonText () {

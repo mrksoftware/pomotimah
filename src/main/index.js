@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, dialog } from 'electron'
 import { autoUpdater } from 'electron-updater'
 const isDev = require('electron-is-dev')
 
@@ -45,6 +45,24 @@ function createWindow () {
   mainWindow.on('move', () => {
     mainWindow.setIgnoreMouseEvents(false)
   })
+
+  mainWindow.setThumbarButtons([
+    {
+      tooltip: 'Skip',
+      icon: 'src/main/assets/play-next-button.png',
+      click () { mainWindow.webContents.send('skip-slot') }
+    },
+    {
+      tooltip: 'Play',
+      icon: 'src/main/assets/play-button.png',
+      click () { mainWindow.webContents.send('play-pause-timer') }
+    },
+    {
+      tooltip: 'Check Update',
+      icon: 'src/main/assets/progress-arrows.png',
+      click () { autoUpdater.checkForUpdates() }
+    }
+  ])
 }
 
 app.on('ready', () => {
@@ -74,10 +92,19 @@ app.on('activate', () => {
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
 
-autoUpdater.on('update-downloaded', () => {
-  console.log('--check')
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
   mainWindow.webContents.send('update-downloaded')
-  autoUpdater.quitAndInstall()
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+  }
+
+  dialog.showMessageBox(dialogOpts, (response) => {
+    if (response === 0) autoUpdater.quitAndInstall()
+  })
 })
 
 autoUpdater.on('checking-for-update', () => {
@@ -96,6 +123,6 @@ autoUpdater.on('update-available', () => {
 })
 
 autoUpdater.on('download-progress', (progress) => {
-  let message = `${progress.percent}% at ${progress.bytesPerSecond}Mb/s`
+  let message = 'Downloading update...'
   mainWindow.webContents.send('download-progress', message)
 })
