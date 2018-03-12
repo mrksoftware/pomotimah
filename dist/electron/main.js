@@ -2565,10 +2565,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+var path = __webpack_require__(0);
 var isDev = __webpack_require__(8);
 
 if (process.env.NODE_ENV !== 'development') {
-  global.__static = __webpack_require__(0).join(__dirname, '/static').replace(/\\/g, '\\\\');
+  global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\');
 }
 
 var mainWindow = void 0;
@@ -2591,7 +2592,7 @@ function createWindow() {
   mainWindow.setAlwaysOnTop(true);
   mainWindow.setIgnoreMouseEvents(false);
   mainWindow.loadURL(winURL);
-
+  console.log(path.join(__dirname, 'assets/play-button.png'));
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
@@ -2602,19 +2603,19 @@ function createWindow() {
 
   mainWindow.setThumbarButtons([{
     tooltip: 'Skip',
-    icon: 'src/main/assets/play-next-button.png',
+    icon: path.join(__dirname, 'build/icons/play-next-button.png'),
     click: function click() {
       mainWindow.webContents.send('skip-slot');
     }
   }, {
     tooltip: 'Play',
-    icon: 'src/main/assets/play-button.png',
+    icon: path.join(__dirname, 'build/icons/play-button.png'),
     click: function click() {
       mainWindow.webContents.send('play-pause-timer');
     }
   }, {
     tooltip: 'Check Update',
-    icon: 'src/main/assets/progress-arrows.png',
+    icon: path.join(__dirname, 'build/icons/progress-arrows.png'),
     click: function click() {
       __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].checkForUpdates();
     }
@@ -2691,7 +2692,7 @@ module.exports = __webpack_require__(16);
 
 process.env.NODE_ENV = 'development';
 
-__webpack_require__(19)({ showDevTools: true });
+__webpack_require__(19)({ showDevTools: false });
 
 __webpack_require__(2).app.on('ready', function () {
   var installExtension = __webpack_require__(30);
@@ -7288,7 +7289,7 @@ function map_obj(obj, fn){
 /* 46 */
 /***/ (function(module, exports) {
 
-module.exports = {"_args":[[{"raw":"7zip@0.0.6","scope":null,"escapedName":"7zip","name":"7zip","rawSpec":"0.0.6","spec":"0.0.6","type":"version"},"C:\\Users\\Mirko\\Documents\\GitHub\\pomotimah\\node_modules\\electron-devtools-installer"]],"_from":"7zip@0.0.6","_id":"7zip@0.0.6","_inCache":true,"_location":"/7zip","_nodeVersion":"5.11.0","_npmOperationalInternal":{"host":"packages-12-west.internal.npmjs.com","tmp":"tmp/7zip-0.0.6.tgz_1463274735811_0.1922009070403874"},"_npmUser":{"name":"fritx","email":"uxfritz@163.com"},"_npmVersion":"3.8.6","_phantomChildren":{},"_requested":{"raw":"7zip@0.0.6","scope":null,"escapedName":"7zip","name":"7zip","rawSpec":"0.0.6","spec":"0.0.6","type":"version"},"_requiredBy":["/electron-devtools-installer"],"_resolved":"https://registry.npmjs.org/7zip/-/7zip-0.0.6.tgz","_shasum":"9cafb171af82329490353b4816f03347aa150a30","_shrinkwrap":null,"_spec":"7zip@0.0.6","_where":"C:\\Users\\Mirko\\Documents\\GitHub\\pomotimah\\node_modules\\electron-devtools-installer","bin":{"7z":"7zip-lite/7z.exe"},"bugs":{"url":"https://github.com/fritx/win-7zip/issues"},"dependencies":{},"description":"7zip Windows Package via Node.js","devDependencies":{},"directories":{},"dist":{"shasum":"9cafb171af82329490353b4816f03347aa150a30","tarball":"https://registry.npmjs.org/7zip/-/7zip-0.0.6.tgz"},"gitHead":"ece5481873f357545c99a9e2f9e1cdb3fe76de2d","homepage":"https://github.com/fritx/win-7zip#readme","keywords":["7z","7zip","7-zip","windows","install"],"license":"GNU LGPL","main":"index.js","maintainers":[{"name":"fritx","email":"uxfritz@163.com"}],"name":"7zip","optionalDependencies":{},"readme":"ERROR: No README data found!","repository":{"type":"git","url":"git+ssh://git@github.com/fritx/win-7zip.git"},"scripts":{"test":"mocha"},"version":"0.0.6"}
+module.exports = {"_from":"7zip@0.0.6","_id":"7zip@0.0.6","_inBundle":false,"_integrity":"sha1-nK+xca+CMpSQNTtIFvAzR6oVCjA=","_location":"/7zip","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"7zip@0.0.6","name":"7zip","escapedName":"7zip","rawSpec":"0.0.6","saveSpec":null,"fetchSpec":"0.0.6"},"_requiredBy":["/electron-devtools-installer"],"_resolved":"https://registry.npmjs.org/7zip/-/7zip-0.0.6.tgz","_shasum":"9cafb171af82329490353b4816f03347aa150a30","_spec":"7zip@0.0.6","_where":"C:\\Users\\mirko.bellabarba\\Documents\\GitHub\\pomotimah\\node_modules\\electron-devtools-installer","bin":{"7z":"7zip-lite/7z.exe"},"bugs":{"url":"https://github.com/fritx/win-7zip/issues"},"bundleDependencies":false,"deprecated":false,"description":"7zip Windows Package via Node.js","homepage":"https://github.com/fritx/win-7zip#readme","keywords":["7z","7zip","7-zip","windows","install"],"license":"GNU LGPL","main":"index.js","name":"7zip","repository":{"type":"git","url":"git+ssh://git@github.com/fritx/win-7zip.git"},"scripts":{"test":"mocha"},"version":"0.0.6"}
 
 /***/ }),
 /* 47 */

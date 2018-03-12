@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow, dialog } from 'electron'
 import { autoUpdater } from 'electron-updater'
+const path = require('path')
 const isDev = require('electron-is-dev')
 
 /**
@@ -9,7 +10,7 @@ const isDev = require('electron-is-dev')
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
 if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+  global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
 let mainWindow
@@ -37,7 +38,7 @@ function createWindow () {
   mainWindow.setAlwaysOnTop(true)
   mainWindow.setIgnoreMouseEvents(false)
   mainWindow.loadURL(winURL)
-
+  
   mainWindow.on('closed', () => {
     mainWindow = null
   })
@@ -49,17 +50,17 @@ function createWindow () {
   mainWindow.setThumbarButtons([
     {
       tooltip: 'Skip',
-      icon: 'src/main/assets/play-next-button.png',
+      icon: path.join(__dirname, 'assets/play-next-button.png'),
       click () { mainWindow.webContents.send('skip-slot') }
     },
     {
       tooltip: 'Play',
-      icon: 'src/main/assets/play-button.png',
+      icon: path.join(__dirname, 'assets/play-button.png'),
       click () { mainWindow.webContents.send('play-pause-timer') }
     },
     {
       tooltip: 'Check Update',
-      icon: 'src/main/assets/progress-arrows.png',
+      icon: path.join(__dirname, 'assets/progress-arrows.png'),
       click () { autoUpdater.checkForUpdates() }
     }
   ])
