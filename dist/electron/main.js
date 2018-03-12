@@ -2592,7 +2592,6 @@ function createWindow() {
   mainWindow.setAlwaysOnTop(true);
   mainWindow.setIgnoreMouseEvents(false);
   mainWindow.loadURL(winURL);
-  console.log(path.join(__dirname, 'assets/play-button.png'));
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
@@ -2600,22 +2599,22 @@ function createWindow() {
   mainWindow.on('move', function () {
     mainWindow.setIgnoreMouseEvents(false);
   });
-
+  console.log(path.join(__dirname, '/../../build/icons', 'play-button.png'));
   mainWindow.setThumbarButtons([{
     tooltip: 'Skip',
-    icon: path.join(__dirname, 'build/icons/play-next-button.png'),
+    icon: __WEBPACK_IMPORTED_MODULE_0_electron__["nativeImage"].createFromPath(path.join(__dirname, '/../../build/icons', 'play-next-button.png')),
     click: function click() {
       mainWindow.webContents.send('skip-slot');
     }
   }, {
     tooltip: 'Play',
-    icon: path.join(__dirname, 'build/icons/play-button.png'),
+    icon: __WEBPACK_IMPORTED_MODULE_0_electron__["nativeImage"].createFromPath(path.join(__dirname, '/../../build/icons', 'play-button.png')),
     click: function click() {
       mainWindow.webContents.send('play-pause-timer');
     }
   }, {
     tooltip: 'Check Update',
-    icon: path.join(__dirname, 'build/icons/progress-arrows.png'),
+    icon: __WEBPACK_IMPORTED_MODULE_0_electron__["nativeImage"].createFromPath(path.join(__dirname, '/../../build/icons', 'progress-arrows.png')),
     click: function click() {
       __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].checkForUpdates();
     }

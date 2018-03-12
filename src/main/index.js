@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, dialog } from 'electron'
+import { app, BrowserWindow, dialog, nativeImage } from 'electron'
 import { autoUpdater } from 'electron-updater'
 const path = require('path')
 const isDev = require('electron-is-dev')
@@ -38,7 +38,6 @@ function createWindow () {
   mainWindow.setAlwaysOnTop(true)
   mainWindow.setIgnoreMouseEvents(false)
   mainWindow.loadURL(winURL)
-  
   mainWindow.on('closed', () => {
     mainWindow = null
   })
@@ -46,21 +45,21 @@ function createWindow () {
   mainWindow.on('move', () => {
     mainWindow.setIgnoreMouseEvents(false)
   })
-
+  console.log(path.join(__dirname, '/../../build/icons', 'play-button.png'))
   mainWindow.setThumbarButtons([
     {
       tooltip: 'Skip',
-      icon: path.join(__dirname, 'assets/play-next-button.png'),
+      icon: nativeImage.createFromPath(path.join(__dirname, '/../../build/icons', 'play-next-button.png')),
       click () { mainWindow.webContents.send('skip-slot') }
     },
     {
       tooltip: 'Play',
-      icon: path.join(__dirname, 'assets/play-button.png'),
+      icon: nativeImage.createFromPath(path.join(__dirname, '/../../build/icons', 'play-button.png')),
       click () { mainWindow.webContents.send('play-pause-timer') }
     },
     {
       tooltip: 'Check Update',
-      icon: path.join(__dirname, 'assets/progress-arrows.png'),
+      icon: nativeImage.createFromPath(path.join(__dirname, '/../../build/icons', 'progress-arrows.png')),
       click () { autoUpdater.checkForUpdates() }
     }
   ])
