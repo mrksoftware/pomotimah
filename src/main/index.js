@@ -45,21 +45,20 @@ function createWindow () {
   mainWindow.on('move', () => {
     mainWindow.setIgnoreMouseEvents(false)
   })
-  console.log(path.join(__dirname, '/../../build/icons', 'play-button.png'))
   mainWindow.setThumbarButtons([
     {
       tooltip: 'Skip',
-      icon: nativeImage.createFromPath(path.join(__dirname, '/../../build/icons', 'play-next-button.png')),
+      icon: nativeImage.createFromPath(path.join(__static, 'images', 'play-next-button.png')),
       click () { mainWindow.webContents.send('skip-slot') }
     },
     {
       tooltip: 'Play',
-      icon: nativeImage.createFromPath(path.join(__dirname, '/../../build/icons', 'play-button.png')),
+      icon: nativeImage.createFromPath(path.join(__static, 'images', 'play-button.png')),
       click () { mainWindow.webContents.send('play-pause-timer') }
     },
     {
       tooltip: 'Check Update',
-      icon: nativeImage.createFromPath(path.join(__dirname, '/../../build/icons', 'progress-arrows.png')),
+      icon: nativeImage.createFromPath(path.join(__static, 'images', 'progress-arrows.png')),
       click () { autoUpdater.checkForUpdates() }
     }
   ])
