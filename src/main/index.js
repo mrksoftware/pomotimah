@@ -37,6 +37,7 @@ function createWindow () {
   mainWindow.setMenuBarVisibility(false)
   mainWindow.setAlwaysOnTop(true)
   mainWindow.setIgnoreMouseEvents(false)
+  mainWindow.setMinimizable(false)
   mainWindow.loadURL(winURL)
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -45,23 +46,44 @@ function createWindow () {
   mainWindow.on('move', () => {
     mainWindow.setIgnoreMouseEvents(false)
   })
-  mainWindow.setThumbarButtons([
+  var thumbBarButtons = [
     {
       tooltip: 'Skip',
-      icon: nativeImage.createFromPath(path.join(__static, 'images', 'play-next-button.png')),
+      icon: nativeImage.createFromPath(path.join(__static, 'images', 'next-track.png')),
       click () { mainWindow.webContents.send('skip-slot') }
     },
     {
       tooltip: 'Play',
       icon: nativeImage.createFromPath(path.join(__static, 'images', 'play-button.png')),
-      click () { mainWindow.webContents.send('play-pause-timer') }
+      click () {
+        /* if (mainWindow.isAlwaysOnTop()) {
+          thumbBarButtons[3].icon = nativeImage.createFromPath(path.join(__static, 'images', 'always-on-top-off.png'))
+        } else {
+          thumbBarButtons[3].icon = nativeImage.createFromPath(path.join(__static, 'images', 'always-on-top-on.png'))
+        } */
+        mainWindow.webContents.send('play-pause-timer')
+      }
     },
     {
       tooltip: 'Check Update',
       icon: nativeImage.createFromPath(path.join(__static, 'images', 'progress-arrows.png')),
       click () { autoUpdater.checkForUpdates() }
+    },
+    {
+      tooltip: 'Always on top',
+      icon: nativeImage.createFromPath(path.join(__static, 'images', 'always-on-top-off.png')),
+      click () {
+        mainWindow.setAlwaysOnTop(!mainWindow.isAlwaysOnTop())
+        if (mainWindow.isAlwaysOnTop()) {
+          thumbBarButtons[3].icon = nativeImage.createFromPath(path.join(__static, 'images', 'always-on-top-off.png'))
+        } else {
+          thumbBarButtons[3].icon = nativeImage.createFromPath(path.join(__static, 'images', 'always-on-top-on.png'))
+        }
+        mainWindow.setThumbarButtons(thumbBarButtons)
+      }
     }
-  ])
+  ]
+  mainWindow.setThumbarButtons(thumbBarButtons)
 }
 
 app.on('ready', () => {
