@@ -1,6 +1,6 @@
 const state = {
   workRoundInSeconds: 1500,
-  shortBreakInSeconds: 10,
+  shortBreakInSeconds: 300,
   longBreakInSeconds: 900,
   currentIteration: 1,
   currentSlotName: 'work', // work, short-break, long-break
