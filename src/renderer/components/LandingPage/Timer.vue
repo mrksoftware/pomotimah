@@ -61,7 +61,8 @@
       return {
         fill: {gradient: ['#c0392b']},
         remainingMilliseconds: this.$store.getters.currentTimerValue * 1000,
-        updateStatus: ''
+        updateStatus: '',
+        isAlwaysOnTopPreviousValue: true
       }
     },
     methods: {
@@ -170,6 +171,19 @@
       },
       hasToDisplayUpdateMessage () {
         return this.updateStatus !== ''
+      }
+    },
+    watch: {
+      isPromptingNextSlot (val) {
+        let window = remote.getCurrentWindow()
+        console.log(this.isAlwaysOnTopPreviousValue)
+        if (val) {
+          this.isAlwaysOnTopPreviousValue = window.isAlwaysOnTop()
+          window.setAlwaysOnTop(true)
+        } else {
+          window.setAlwaysOnTop(this.isAlwaysOnTopPreviousValue)
+          console.log(this.isAlwaysOnTopPreviousValue)
+        }
       }
     }
   }
