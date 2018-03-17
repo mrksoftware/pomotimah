@@ -164,9 +164,7 @@
         this.updateStatus = message
         let self = this
         setTimeout(function () {
-          if (self.$data.updateStatus !== 'Downloading update...') {
-            self.$data.updateStatus = ''
-          }
+          self.$data.updateStatus = ''
         }, 2500)
       })
     },

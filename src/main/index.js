@@ -137,9 +137,9 @@ autoUpdater.on('update-not-available', () => {
 })
 
 autoUpdater.on('update-available', () => {
-  mainWindow.webContents.send('auto-updater-ping', 'Getting new update...')
+  mainWindow.webContents.send('auto-updater-ping', 'New update found...')
 })
 
 autoUpdater.on('download-progress', (event, progress) => {
-  mainWindow.webContents.send('auto-updater-ping', `JSON: ${JSON.stringify(progress)}`)
+  mainWindow.webContents.send('auto-updater-ping', 'Downloading update...')
 })
