@@ -6,7 +6,8 @@ const state = {
   currentSlotName: 'work', // work, short-break, long-break
   isTimerStarted: false,
   isPromptingNextSlot: false,
-  minimizedWindowPosition: [100, 100]
+  minimizedWindowPosition: [100, 100],
+  isInDevMode: true
 }
 
 const mutations = {
@@ -60,17 +61,27 @@ const getters = {
   currentTimerValue () {
     switch (state.currentSlotName) {
       case 'work':
-        return state.workRoundInSeconds
+        return state.isInDevMode ? state.workRoundInSeconds / 100 : state.workRoundInSeconds
       case 'short-break':
-        return state.shortBreakInSeconds
+        return state.isInDevMode ? state.shortBreakInSeconds / 100 : state.shortBreakInSeconds
       case 'long-break':
-        return state.longBreakInSeconds
+        return state.isInDevMode ? state.longBreakInSeconds / 100 : state.longBreakInSeconds
       default:
         return 1500
     }
   },
   currentSlotName () {
     return state.currentSlotName
+  },
+  nextSlotName () {
+    let nextIterationCount = state.currentIteration + 1
+    if (state.currentSlotName === 'work' && nextIterationCount % 8 !== 0) {
+      return 'short-break'
+    } else if (state.currentSlotName === 'work' && nextIterationCount % 8 === 0) {
+      return 'long-break'
+    } else {
+      return 'work'
+    }
   },
   workRoundInSeconds () {
     return state.workRoundInSeconds

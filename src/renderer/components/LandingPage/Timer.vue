@@ -39,7 +39,14 @@
       </div>
     </div>
     <div id="maximizedContainer" v-else>
-      <span>Do you wanna start your next slot?</span>
+      <div id="nextSlotIconsContainer">
+        <img :src="prevSlotIcon"/>
+        <img id="next" src="static/images/next.svg"/>
+        <img :src="nextSlotIcon"/>
+      </div>
+      <template v-for="(line, key) in notificationMessage.split('\n')">
+        <span :key="key">{{ line }}</span><br :key="key">
+      </template>
       <div id="buttonContainer">
         <button id="yesButton" @click="onYesButtonClicked()">Yep!</button>
         <button id="noButton" @click="onNoButtonClicked()">Nope!</button>
@@ -112,6 +119,15 @@
         this.$store.dispatch('pauseTimer')
         this.$store.dispatch('moveToNextSlot')
         window.setIgnoreMouseEvents(true, {forward: true})
+      },
+      getSlotIcon (slotName) {
+        if (slotName === 'work') {
+          return `static/images/thinking.png`
+        } else if (slotName === 'long-break') {
+          return `static/images/croissant.png`
+        } else {
+          return `static/images/coffee-cup.png`
+        }
       }
     },
     mounted () {
@@ -128,7 +144,7 @@
         }
       })
 
-      ipcRenderer.on('auto-updater-ping', (message) => {
+      ipcRenderer.on('auto-updater-ping', (event, message) => {
         this.updateStatus = message
         let self = this
         setTimeout(function () {
@@ -156,18 +172,36 @@
       },
       hasToDisplayUpdateMessage () {
         return this.updateStatus !== ''
+      },
+      notificationMessage () {
+        let nextSlotName = this.$store.getters.nextSlotName
+        if (nextSlotName === 'work') {
+          return `Time to get back to WORK!
+          Make somthing great!
+          Do you wanna start your next slot now?`
+        } else {
+          return `Time to get a ${nextSlotName.replace('-', ' ').toUpperCase()}!
+          Make somthing great... for yourself!
+          Do you wanna start your next slot now?`
+        }
+      },
+      prevSlotIcon () {
+        let slotName = this.$store.getters.currentSlotName
+        return this.getSlotIcon(slotName)
+      },
+      nextSlotIcon () {
+        let slotName = this.$store.getters.nextSlotName
+        return this.getSlotIcon(slotName)
       }
     },
     watch: {
       isPromptingNextSlot (val) {
         let window = remote.getCurrentWindow()
-        console.log(this.isAlwaysOnTopPreviousValue)
         if (val) {
           this.isAlwaysOnTopPreviousValue = window.isAlwaysOnTop()
           window.setAlwaysOnTop(true)
         } else {
           window.setAlwaysOnTop(this.isAlwaysOnTopPreviousValue)
-          console.log(this.isAlwaysOnTopPreviousValue)
         }
       }
     }
@@ -176,6 +210,7 @@
 
 <style lang="scss" scoped>
   @import "../../../styles/mixins.scss";
+  $imagesSize: 128px;
 
   div#container {
     display: flex;
@@ -232,6 +267,24 @@
       align-items: center;
       justify-content: center;
       background-color: rgba(51, 51, 51, 0.95);
+
+      div#nextSlotIconsContainer {
+       display: flex;
+       flex-direction: row; 
+       align-items: center;
+       margin: 12px;
+
+       img {
+         width: $imagesSize;
+         height: $imagesSize;
+         margin: 24px;
+
+         &#next {
+           width: $imagesSize / 2;
+          height: $imagesSize / 2;
+         }
+       }
+      }
 
       div#buttonContainer {
         display: flex;

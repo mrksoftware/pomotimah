@@ -140,6 +140,6 @@ autoUpdater.on('update-available', () => {
   mainWindow.webContents.send('auto-updater-ping', 'Getting new update...')
 })
 
-autoUpdater.on('download-progress', (progress) => {
-  mainWindow.webContents.send('auto-updater-ping', 'Downloading update...')
+autoUpdater.on('download-progress', (event, progress) => {
+  mainWindow.webContents.send('auto-updater-ping', `${progress.percent}% at ${Math.round10(progress.bytesPerSecond / 1000000, -1)}MB/s`)
 })
