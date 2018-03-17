@@ -141,5 +141,5 @@ autoUpdater.on('update-available', () => {
 })
 
 autoUpdater.on('download-progress', (event, progress) => {
-  mainWindow.webContents.send('auto-updater-ping', JSON.stringify(progress))
+  mainWindow.webContents.send('auto-updater-ping', `JSON: ${JSON.stringify(progress)}`)
 })
