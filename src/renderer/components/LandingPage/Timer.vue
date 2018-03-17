@@ -128,29 +128,14 @@
         }
       })
 
-      ipcRenderer.on('update-available', () => {
-        this.updateStatus = 'Getting new update...'
-        let self = this
-        setTimeout(function () {
-          self.$data.updateStatus = ''
-        }, 2500)
-      })
-      ipcRenderer.on('update-not-available', () => {
-        this.updateStatus = 'No update available...'
-        let self = this
-        setTimeout(function () {
-          self.$data.updateStatus = ''
-        }, 2500)
-      })
-      ipcRenderer.on('checking-for-update', () => {
-        this.updateStatus = 'Checking for update'
-        let self = this
-        setTimeout(function () {
-          self.$data.updateStatus = ''
-        }, 2500)
-      })
-      ipcRenderer.on('download-progress', (message) => {
+      ipcRenderer.on('auto-updater-ping', (message) => {
         this.updateStatus = message
+        let self = this
+        setTimeout(function () {
+          if (self.$data.updateStatus !== 'Downloading update...') {
+            self.$data.updateStatus = ''
+          }
+        }, 2500)
       })
     },
     computed: {

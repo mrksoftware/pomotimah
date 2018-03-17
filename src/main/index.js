@@ -114,7 +114,7 @@ app.on('activate', () => {
  */
 
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-  mainWindow.webContents.send('update-downloaded')
+  mainWindow.webContents.send('auto-updater-ping', 'Update downloaded...')
   const dialogOpts = {
     type: 'info',
     buttons: ['Restart', 'Later'],
@@ -129,21 +129,17 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 })
 
 autoUpdater.on('checking-for-update', () => {
-  console.log('--check')
-  mainWindow.webContents.send('checking-for-update')
+  mainWindow.webContents.send('auto-updater-ping', 'Checking for update')
 })
 
 autoUpdater.on('update-not-available', () => {
-  console.log('--not')
-  mainWindow.webContents.send('update-not-available')
+  mainWindow.webContents.send('auto-updater-ping', 'No update available..')
 })
 
 autoUpdater.on('update-available', () => {
-  console.log('--yep')
-  mainWindow.webContents.send('update-available')
+  mainWindow.webContents.send('auto-updater-ping', 'Getting new update...')
 })
 
 autoUpdater.on('download-progress', (progress) => {
-  let message = 'Downloading update...'
-  mainWindow.webContents.send('download-progress', message)
+  mainWindow.webContents.send('auto-updater-ping', 'Downloading update...')
 })
