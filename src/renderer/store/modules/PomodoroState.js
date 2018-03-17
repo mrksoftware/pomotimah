@@ -7,7 +7,7 @@ const state = {
   isTimerStarted: false,
   isPromptingNextSlot: false,
   minimizedWindowPosition: [100, 100],
-  isInDevMode: true
+  isInDevMode: false
 }
 
 const mutations = {
