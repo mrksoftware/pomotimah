@@ -177,11 +177,11 @@
         let nextSlotName = this.$store.getters.nextSlotName
         if (nextSlotName === 'work') {
           return `Time to get back to WORK!
-          Make somthing great!
+          Make something great!
           Do you wanna start your next slot now?`
         } else {
           return `Time to get a ${nextSlotName.replace('-', ' ').toUpperCase()}!
-          Make somthing great... for yourself!
+          Make something great... for yourself!
           Do you wanna start your next slot now?`
         }
       },
