@@ -48,8 +48,10 @@
         <span :key="key">{{ line }}</span><br :key="key">
       </template>
       <div id="buttonContainer">
-        <button id="yesButton" @click="onYesButtonClicked()">Yep!</button>
-        <button id="noButton" @click="onNoButtonClicked()">Nope!</button>
+        <button id="yesButton" @click="onYesButtonClicked()" 
+                               @mousemove="onMouseMoveOverButtons()">Yep!</button>
+        <button id="noButton"  @click="onNoButtonClicked()"
+                               @mousemove="onMouseMoveOverButtons()">Nope!</button>
       </div>
     </div>
   </div>
@@ -60,6 +62,7 @@
   import VueCountdown from './../../utils/countdown'
   import { setTimeout } from 'timers'
   const { remote, ipcRenderer } = require('electron')
+  let timer
 
   export default {
     name: 'Timer',
@@ -128,6 +131,19 @@
         } else {
           return `static/images/coffee-cup.png`
         }
+      },
+      onMouseMoveOverButtons: function () {
+        var window = remote.getCurrentWindow()
+        window.setIgnoreMouseEvents(false)
+        this.debounceDisableClick()
+      },
+      debounceDisableClick: function () {
+        clearTimeout(timer)
+        let self = this // eslint-disable-line no-unused-vars
+        timer = setTimeout(function () {
+          var window = remote.getCurrentWindow()
+          window.setIgnoreMouseEvents(true, {forward: true})
+        }, 2000)
       }
     },
     mounted () {
