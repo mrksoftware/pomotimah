@@ -128,6 +128,10 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
   })
 })
 
+autoUpdater.on('error', (event, error) => {
+  mainWindow.webContents.send('auto-updater-ping', `error: ${error}`)
+})
+
 autoUpdater.on('checking-for-update', () => {
   mainWindow.webContents.send('auto-updater-ping', 'Checking for update')
 })
